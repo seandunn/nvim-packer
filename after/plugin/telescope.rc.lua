@@ -43,10 +43,7 @@ local builtin = require("telescope.builtin")
 --telescope.load_extension("file_browser")
 
 vim.keymap.set('n', '<leader>tf', function()
-  builtin.find_files({
-    no_ignore = false,
-    hidden = true
-  })
+  builtin.find_files()
 end)
 
 vim.keymap.set('n', '<leader>tr', function()

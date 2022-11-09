@@ -1,1 +1,0 @@
---Configure the Nightfox theme

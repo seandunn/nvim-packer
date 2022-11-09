@@ -1,3 +1,112 @@
+-- PACKER --
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
+end
+
+local packer_bootstrap = ensure_packer()
+
+require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'
+  use 'nvim-lualine/lualine.nvim' -- Statusline
+  use 'EdenEast/nightfox.nvim'
+
+  use 'nvim-lua/plenary.nvim' -- Common utilities
+  use 'onsails/lspkind-nvim' -- vscode-like pictograms
+  use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
+  use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
+  use 'hrsh7th/nvim-cmp' -- Completion
+  use 'neovim/nvim-lspconfig' -- LSP
+  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+--  use 'MunifTanjim/prettier.nvim' -- Prettier plugin for Neovim's built-in LSP client
+  use 'williamboman/mason.nvim'
+  use 'williamboman/mason-lspconfig.nvim'
+
+  use 'glepnir/lspsaga.nvim' -- LSP UIs
+  use 'L3MON4D3/LuaSnip'
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  }
+  use 'kyazdani42/nvim-web-devicons' -- File icons
+  use 'nvim-telescope/telescope.nvim'
+
+  -- use {
+  --   'edluffy/hologram.nvim',
+  --   run = require('hologram').setup{
+  --   auto_display = true -- WIP automatic markdown image display, may be prone to breaking
+  --   }
+  -- }
+
+  use {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v2.x",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    }
+  }
+
+  use 'windwp/nvim-autopairs'
+  use 'windwp/nvim-ts-autotag'
+
+  use 'norcalli/nvim-colorizer.lua'
+ -- use({
+ --   "iamcco/markdown-preview.nvim",
+ --   run = function() vim.fn["mkdp#util#install"]() end,
+ -- })
+  use 'akinsho/nvim-bufferline.lua'
+
+  use 'lewis6991/gitsigns.nvim'
+
+  use 'tpope/vim-fugitive'
+
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
+
+  use 'vimwiki/vimwiki'
+  use({
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  })
+
+  use {
+    "anuvyklack/windows.nvim",
+    requires = {
+      "anuvyklack/middleclass",
+      "anuvyklack/animation.nvim"
+    },
+    config = function()
+      vim.o.winwidth = 10
+      vim.o.winminwidth = 10
+      vim.o.equalalways = false
+      require('windows').setup()
+    end
+  }
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
+
 -- BASE SETTINGS --
 vim.cmd("autocmd!")
 
@@ -61,118 +170,6 @@ vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "setlocal non
 vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "startinsert" })
 vim.api.nvim_create_autocmd("TermEnter ", { pattern = '*', command = [[ let b:insertMode = "yes" ]] })
 -- vim.api.nvim_create_autocmd("BufEnter", { pattern = 'term://*', command = "startinsert" } )
-
--- PACKER --
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
-end
-
-local packer_bootstrap = ensure_packer()
-
-require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
-  use 'nvim-lualine/lualine.nvim' -- Statusline
-  use 'EdenEast/nightfox.nvim'
-
-  use 'nvim-lua/plenary.nvim' -- Common utilities
-  use 'onsails/lspkind-nvim' -- vscode-like pictograms
-  use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
-  use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
-  use 'hrsh7th/nvim-cmp' -- Completion
-  use 'neovim/nvim-lspconfig' -- LSP
-  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
---  use 'MunifTanjim/prettier.nvim' -- Prettier plugin for Neovim's built-in LSP client
-  use 'williamboman/mason.nvim'
-  use 'williamboman/mason-lspconfig.nvim'
-
-  use 'glepnir/lspsaga.nvim' -- LSP UIs
-  use 'L3MON4D3/LuaSnip'
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  }
-  use 'kyazdani42/nvim-web-devicons' -- File icons
-  use 'nvim-telescope/telescope.nvim'
-  --use 'nvim-telescope/telescope-file-browser.nvim'
-
-  use {
-    'edluffy/hologram.nvim',
-    run = require('hologram').setup{
-    auto_display = true -- WIP automatic markdown image display, may be prone to breaking
-    }
-  }
-
-  use {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "kyazdani42/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    }
-  }
-
-  use 'windwp/nvim-autopairs'
-  use 'windwp/nvim-ts-autotag'
-
-  use 'norcalli/nvim-colorizer.lua'
- -- use({
- --   "iamcco/markdown-preview.nvim",
- --   run = function() vim.fn["mkdp#util#install"]() end,
- -- })
-  use 'akinsho/nvim-bufferline.lua'
-  -- use 'github/copilot.vim'
-
-  use 'lewis6991/gitsigns.nvim'
-
-  -- use 'dinhhuy258/git.nvim' -- For git blame & browse
-  use 'tpope/vim-fugitive'
-
-  use {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end
-  }
-
-  use 'vimwiki/vimwiki'
-  use({
-    "kylechui/nvim-surround",
-    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
-    config = function()
-      require("nvim-surround").setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end
-  })
-
-  use {
-    "anuvyklack/windows.nvim",
-    requires = {
-      "anuvyklack/middleclass",
-      "anuvyklack/animation.nvim"
-    },
-    config = function()
-      vim.o.winwidth = 10
-      vim.o.winminwidth = 10
-      vim.o.equalalways = false
-      require('windows').setup()
-    end
-  }
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
-end)
 
 -- HIGHLIGHTS --
 vim.opt.cursorline = true
