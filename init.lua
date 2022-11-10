@@ -38,6 +38,15 @@ vim.opt.wildignore:append { '*/node_modules/*' }
 vim.w.splitbelow = true
 vim.w.splitright = true
 
+-- HIGHLIGHTS --
+vim.opt.cursorline = true
+vim.opt.termguicolors = true
+vim.opt.winblend = 10
+vim.opt.wildoptions = 'pum'
+vim.opt.pumblend = 10
+vim.opt.background = 'dark'
+vim.o.signcolumn = 'yes'
+
 
 -- PACKER --
 local ensure_packer = function()
@@ -56,27 +65,28 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'nvim-lualine/lualine.nvim' -- Statusline
-  use 'EdenEast/nightfox.nvim'
+  use 'EdenEast/nightfox.nvim' -- Colourscheme
 
   use 'nvim-lua/plenary.nvim' -- Common utilities
   use 'onsails/lspkind-nvim' -- vscode-like pictograms
+  use 'hrsh7th/nvim-cmp' -- Completion
   use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
   use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
-  use 'hrsh7th/nvim-cmp' -- Completion
   use 'neovim/nvim-lspconfig' -- LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
---  use 'MunifTanjim/prettier.nvim' -- Prettier plugin for Neovim's built-in LSP client
-  use 'williamboman/mason.nvim'
+  use 'williamboman/mason.nvim' -- Install/manage LSP servers
   use 'williamboman/mason-lspconfig.nvim'
 
   use 'glepnir/lspsaga.nvim' -- LSP UIs
   use 'L3MON4D3/LuaSnip'
+
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
   }
   use 'kyazdani42/nvim-web-devicons' -- File icons
-  use 'nvim-telescope/telescope.nvim'
+  require("nvim-web-devicons").setup()
+  use 'nvim-telescope/telescope.nvim' -- Fuzzy finder for all things
 
   -- use {
   --   'edluffy/hologram.nvim',
@@ -85,6 +95,7 @@ require('packer').startup(function(use)
   --   }
   -- }
 
+  -- Project tree
   use {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v2.x",
@@ -96,9 +107,14 @@ require('packer').startup(function(use)
   }
 
   use 'windwp/nvim-autopairs'
+  require("nvim-autopairs").setup({
+    disable_filetype = { "TelescopePrompt" , "vim" },
+  })
   use 'windwp/nvim-ts-autotag'
+  require('nvim-ts-autotag').setup()
 
   use 'norcalli/nvim-colorizer.lua'
+  require'colorizer'.setup()
  -- use({
  --   "iamcco/markdown-preview.nvim",
  --   run = function() vim.fn["mkdp#util#install"]() end,
@@ -106,17 +122,15 @@ require('packer').startup(function(use)
   use 'akinsho/nvim-bufferline.lua'
 
   use 'lewis6991/gitsigns.nvim'
+  require('gitsigns').setup()
 
-  use 'tpope/vim-fugitive'
+  use 'tpope/vim-fugitive' -- Classic Git frontend
 
-  use {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end
+  use { 'numToStr/Comment.nvim', config = function() require('Comment').setup() end
   }
 
   use 'vimwiki/vimwiki'
+
   use({
     "kylechui/nvim-surround",
     tag = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -137,9 +151,9 @@ require('packer').startup(function(use)
       vim.o.winwidth = 10
       vim.o.winminwidth = 10
       vim.o.equalalways = false
-      require('windows').setup()
     end
   }
+  require('windows').setup()
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -171,22 +185,13 @@ vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "startinsert"
 vim.api.nvim_create_autocmd("TermEnter ", { pattern = '*', command = [[ let b:insertMode = "yes" ]] })
 -- vim.api.nvim_create_autocmd("BufEnter", { pattern = 'term://*', command = "startinsert" } )
 
--- HIGHLIGHTS --
-vim.opt.cursorline = true
-vim.opt.termguicolors = true
-vim.opt.winblend = 10
-vim.opt.wildoptions = 'pum'
-vim.opt.pumblend = 10
-vim.opt.background = 'dark'
-vim.o.signcolumn = 'yes'
-
 require('nightfox').setup({
   options = {
+    dim_inactive = true,
     styles = {
       comments = "italic",
       keywords = "bold",
       types = "italic,bold",
-      dim_inactive = true
     }
   }
 })
@@ -199,7 +204,8 @@ vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
 -- Neotree
 vim.keymap.set('n', '<leader>n', ':Neotree toggle=true reveal=true<CR>')
 
--- Simplify moving from split to split
+-- Windows
+-- Simplify moving from window to window
 vim.keymap.set('n', '<A-h>', '<C-w>h')
 vim.keymap.set("t", "<A-h>", [[<C-\><C-n><C-w>h]])
 vim.keymap.set('n', '<A-j>', '<C-w>j')
@@ -209,8 +215,13 @@ vim.keymap.set("t", "<A-l>", [[<C-\><C-n><C-w>l]])
 vim.keymap.set('n', '<A-k>', '<C-w>k')
 vim.keymap.set("t", "<A-k>", [[<C-\><C-n><C-w>k]])
 
+local function cmd(command)
+   return table.concat({ '<Cmd>', command, '<CR>' })
+end
 
-vim.keymap.set("t", "<A-q>", [[<C-\><C-n>:let b:insertMode = 'no'<CR>]])
+vim.keymap.set('n', '<C-w>z', cmd 'WindowsMaximize')
+vim.keymap.set('n', '<C-w>=', cmd 'WindowsEqualize')
+
 vim.keymap.set("t", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 vim.keymap.set("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 
