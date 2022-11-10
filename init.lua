@@ -1,3 +1,44 @@
+-- BASE SETTINGS --
+vim.cmd("autocmd!")
+
+vim.scriptencoding = 'utf-8'
+vim.opt.encoding = 'utf-8'
+vim.opt.fileencoding = 'utf-8'
+vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
+
+vim.wo.number = true
+
+vim.opt.mouse = 'a'
+vim.g.mapleader = ' '
+
+
+vim.opt.title = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.hlsearch = true
+vim.opt.backup = false
+vim.opt.showcmd = true
+vim.opt.cmdheight = 1
+vim.opt.laststatus = 2
+vim.opt.expandtab = true
+vim.opt.scrolloff = 4
+vim.opt.shell = 'zsh'
+vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
+vim.opt.undofile = true
+vim.opt.inccommand = 'split'
+vim.opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
+vim.opt.smarttab = true
+vim.opt.breakindent = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.wrap = true
+vim.opt.backspace = { 'start', 'eol', 'indent' }
+vim.opt.path:append { '**' } -- Finding files - Search down into subfolders
+vim.opt.wildignore:append { '*/node_modules/*' }
+vim.w.splitbelow = true
+vim.w.splitright = true
+
+
 -- PACKER --
 local ensure_packer = function()
   local fn = vim.fn
@@ -107,47 +148,6 @@ require('packer').startup(function(use)
   end
 end)
 
--- BASE SETTINGS --
-vim.cmd("autocmd!")
-
-vim.scriptencoding = 'utf-8'
-vim.opt.encoding = 'utf-8'
-vim.opt.fileencoding = 'utf-8'
-vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
-
-vim.wo.number = true
-
-vim.opt.mouse = 'a'
-vim.g.mapleader = ' '
-
-
-vim.opt.title = true
-vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.hlsearch = true
-vim.opt.backup = false
-vim.opt.showcmd = true
-vim.opt.cmdheight = 1
-vim.opt.laststatus = 2
-vim.opt.expandtab = true
-vim.opt.scrolloff = 4
-vim.opt.shell = 'zsh'
-vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
-vim.opt.undofile = true
-vim.opt.inccommand = 'split'
-vim.opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
-vim.opt.smarttab = true
-vim.opt.breakindent = true
-vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
-vim.opt.wrap = true
-vim.opt.backspace = { 'start', 'eol', 'indent' }
-vim.opt.path:append { '**' } -- Finding files - Search down into subfolders
-vim.opt.wildignore:append { '*/node_modules/*' }
-vim.w.splitbelow = true
-vim.w.splitright = true
-
-
 -- Undercurl
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
 vim.cmd([[let &t_Ce = "\e[4:0m"]])
@@ -193,34 +193,30 @@ require('nightfox').setup({
 vim.cmd("colorscheme nightfox")
 
 -- MAPPINGS --
-local keymap = vim.keymap
-local keymap_opts = { noremap = true, silent = true }
+-- Open Config file
+vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
 
 -- Neotree
-keymap.set('n', '<leader>n', ':Neotree toggle=true reveal=true<CR>')
-
--- Save with root permission (not working for now)
---vim.api.nvim_create_user_command('W', 'w !sudo tee > /dev/null %', {})
-
+vim.keymap.set('n', '<leader>n', ':Neotree toggle=true reveal=true<CR>')
 
 -- Simplify moving from split to split
-keymap.set('n', '<A-h>', '<C-w>h')
-vim.api.nvim_set_keymap("t", "<A-h>", [[<C-\><C-n><C-w>h]], keymap_opts)
-keymap.set('n', '<A-j>', '<C-w>j')
-vim.api.nvim_set_keymap("t", "<A-j>", [[<C-\><C-n><C-w>j]], keymap_opts)
-keymap.set('n', '<A-l>', '<C-w>l')
-vim.api.nvim_set_keymap("t", "<A-l>", [[<C-\><C-n><C-w>l]], keymap_opts)
-keymap.set('n', '<A-k>', '<C-w>k')
-vim.api.nvim_set_keymap("t", "<A-k>", [[<C-\><C-n><C-w>k]], keymap_opts)
+vim.keymap.set('n', '<A-h>', '<C-w>h')
+vim.keymap.set("t", "<A-h>", [[<C-\><C-n><C-w>h]])
+vim.keymap.set('n', '<A-j>', '<C-w>j')
+vim.keymap.set("t", "<A-j>", [[<C-\><C-n><C-w>j]])
+vim.keymap.set('n', '<A-l>', '<C-w>l')
+vim.keymap.set("t", "<A-l>", [[<C-\><C-n><C-w>l]])
+vim.keymap.set('n', '<A-k>', '<C-w>k')
+vim.keymap.set("t", "<A-k>", [[<C-\><C-n><C-w>k]])
 
 
-vim.api.nvim_set_keymap("t", "<A-q>", [[<C-\><C-n>:let b:insertMode = 'no'<CR>]], keymap_opts)
-vim.api.nvim_set_keymap("t", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]], keymap_opts)
-vim.api.nvim_set_keymap("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]], keymap_opts)
+vim.keymap.set("t", "<A-q>", [[<C-\><C-n>:let b:insertMode = 'no'<CR>]])
+vim.keymap.set("t", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
+vim.keymap.set("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 
 -- Tabs --
 -- Since the vim shortcut gt and gT is tricky in terminal mode use the Firefox
 -- tab shortcut instead.
-vim.api.nvim_set_keymap("t", "<C-PageUp>", [[<C-\><C-n>:BufferLineCycleNext<CR>]], keymap_opts)
-vim.api.nvim_set_keymap("t", "<C-PageDown>", [[<C-\><C-n>:BufferLineCyclePrev<CR>]], keymap_opts)
+vim.keymap.set("t", "<C-PageUp>", [[<C-\><C-n>:BufferLineCycleNext<CR>]])
+vim.keymap.set("t", "<C-PageDown>", [[<C-\><C-n>:BufferLineCyclePrev<CR>]])
 
