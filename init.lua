@@ -4,7 +4,7 @@ vim.cmd("autocmd!")
 vim.scriptencoding = 'utf-8'
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
-vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
+-- vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
 
 vim.wo.number = true
 
@@ -176,7 +176,7 @@ vim.api.nvim_create_autocmd("InsertLeave", { pattern = '*', command = "set nopas
 -- Add asterisks in block comments
 vim.opt.formatoptions:append { 'r' }
 
--- Term
+-- Term --
 vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "setlocal nonumber norelativenumber" })
 
 -- Start in insert mode when opening a new terminal buffer
@@ -200,11 +200,12 @@ vim.cmd("colorscheme nightfox")
 -- MAPPINGS --
 -- Open Config file
 vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
+vim.keymap.set('v', '<leader>c', '"+y')
 
--- Neotree
+-- Neotree --
 vim.keymap.set('n', '<leader>n', ':Neotree toggle=true reveal=true<CR>')
 
--- Windows
+-- Windows --
 -- Simplify moving from window to window
 vim.keymap.set('n', '<A-h>', '<C-w>h')
 vim.keymap.set("t", "<A-h>", [[<C-\><C-n><C-w>h]])
@@ -215,19 +216,17 @@ vim.keymap.set("t", "<A-l>", [[<C-\><C-n><C-w>l]])
 vim.keymap.set('n', '<A-k>', '<C-w>k')
 vim.keymap.set("t", "<A-k>", [[<C-\><C-n><C-w>k]])
 
-local function cmd(command)
-   return table.concat({ '<Cmd>', command, '<CR>' })
-end
+vim.keymap.set('n', '<C-w>z', ':WindowsMaximize<CR>')
+vim.keymap.set('n', '<C-w>=', ':WindowsEqualize<CR>')
 
-vim.keymap.set('n', '<C-w>z', cmd 'WindowsMaximize')
-vim.keymap.set('n', '<C-w>=', cmd 'WindowsEqualize')
-
+-- Term --
 vim.keymap.set("t", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 vim.keymap.set("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 
 -- Tabs --
--- Since the vim shortcut gt and gT is tricky in terminal mode use the Firefox
--- tab shortcut instead.
-vim.keymap.set("t", "<C-PageUp>", [[<C-\><C-n>:BufferLineCycleNext<CR>]])
-vim.keymap.set("t", "<C-PageDown>", [[<C-\><C-n>:BufferLineCyclePrev<CR>]])
+-- Since the vim shortcut gt and gT is tricky in terminal
+vim.keymap.set("t", "<A-PageUp>",   [[<C-\><C-n>:tabprevious<CR>]])
+vim.keymap.set("n", "<A-PageUp>",   [[:tabprevious<CR>]])
+vim.keymap.set("n", "<A-PageDown>", [[:tabnext<CR>]])
+vim.keymap.set("t", "<A-PageDown>", [[<C-\><C-n>:tabnext<CR>]])
 
