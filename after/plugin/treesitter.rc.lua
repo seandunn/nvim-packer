@@ -8,7 +8,7 @@ ts.setup {
   },
   indent = {
     enable = true,
-    disable = {},
+    disable = { },
   },
   ensure_installed = {
     "bash",
@@ -16,6 +16,7 @@ ts.setup {
     "cpp",
     "css",
     "dockerfile",
+    "embedded_template",
     "html",
     "javascript",
     "json",
@@ -23,7 +24,6 @@ ts.setup {
     "make",
     "ruby",
     "rust",
-    "toml",
     "vim",
     "yaml",
   },

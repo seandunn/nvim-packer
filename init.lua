@@ -4,7 +4,7 @@ vim.cmd("autocmd!")
 vim.scriptencoding = 'utf-8'
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
--- vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
+vim.cmd.set("spell")
 
 vim.wo.number = true
 
@@ -21,7 +21,7 @@ vim.opt.showcmd = true
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 vim.opt.expandtab = true
-vim.opt.scrolloff = 4
+vim.opt.scrolloff = 1
 vim.opt.shell = 'zsh'
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
 vim.opt.undofile = true
@@ -68,17 +68,18 @@ require('packer').startup(function(use)
   use 'EdenEast/nightfox.nvim' -- Colourscheme
 
   use 'nvim-lua/plenary.nvim' -- Common utilities
-  use 'onsails/lspkind-nvim' -- vscode-like pictograms
+
+  -- LSP --
   use 'hrsh7th/nvim-cmp' -- Completion
   use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
-  use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
-  use 'neovim/nvim-lspconfig' -- LSP
-  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  use 'williamboman/mason.nvim' -- Install/manage LSP servers
-  use 'williamboman/mason-lspconfig.nvim'
-
+  -- use 'L3MON4D3/LuaSnip'
   use 'glepnir/lspsaga.nvim' -- LSP UIs
-  use 'L3MON4D3/LuaSnip'
+  use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
+  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+  use 'neovim/nvim-lspconfig' -- LSP
+  use 'onsails/lspkind-nvim' -- vscode-like pictograms
+  use 'williamboman/mason-lspconfig.nvim'
+  use 'williamboman/mason.nvim' -- Install/manage LSP servers
 
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -87,13 +88,6 @@ require('packer').startup(function(use)
   use 'kyazdani42/nvim-web-devicons' -- File icons
   require("nvim-web-devicons").setup()
   use 'nvim-telescope/telescope.nvim' -- Fuzzy finder for all things
-
-  -- use {
-  --   'edluffy/hologram.nvim',
-  --   run = require('hologram').setup{
-  --   auto_display = true -- WIP automatic markdown image display, may be prone to breaking
-  --   }
-  -- }
 
   -- Project tree
   use {
@@ -106,23 +100,36 @@ require('packer').startup(function(use)
     }
   }
 
-  use 'windwp/nvim-autopairs'
-  require("nvim-autopairs").setup({
-    disable_filetype = { "TelescopePrompt" , "vim" },
-  })
-  use 'windwp/nvim-ts-autotag'
-  require('nvim-ts-autotag').setup()
+  use {
+    'windwp/nvim-autopairs',
+    run = function()
+      require("nvim-autopairs").setup({
+        disable_filetype = { "TelescopePrompt" , "vim" },
+      })
+    end
+  }
 
-  use 'norcalli/nvim-colorizer.lua'
-  require'colorizer'.setup()
- -- use({
- --   "iamcco/markdown-preview.nvim",
- --   run = function() vim.fn["mkdp#util#install"]() end,
- -- })
+  use {
+    'windwp/nvim-ts-autotag',
+    run = function() require('nvim-ts-autotag').setup() end
+  }
+
+  use {
+    'norcalli/nvim-colorizer.lua',
+    run = function() require'colorizer'.setup() end
+  }
+
+
+  -- use({
+  --   "iamcco/markdown-preview.nvim",
+  --   run = function() vim.fn["mkdp#util#install"]() end,
+  -- })
   use 'akinsho/nvim-bufferline.lua'
 
-  use 'lewis6991/gitsigns.nvim'
-  require('gitsigns').setup()
+  use {'lewis6991/gitsigns.nvim',
+  run = function() require('gitsigns').setup() end
+  }
+
 
   use 'tpope/vim-fugitive' -- Classic Git frontend
 
@@ -151,9 +158,10 @@ require('packer').startup(function(use)
       vim.o.winwidth = 10
       vim.o.winminwidth = 10
       vim.o.equalalways = false
-    end
+    end,
+    run = function() require('windows').setup() end
   }
-  require('windows').setup()
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -163,8 +171,8 @@ require('packer').startup(function(use)
 end)
 
 -- Undercurl
-vim.cmd([[let &t_Cs = "\e[4:3m"]])
-vim.cmd([[let &t_Ce = "\e[4:0m"]])
+-- vim.cmd([[let &t_Cs = "\e[4:3m"]])
+-- vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
 -- cursorline
 vim.api.nvim_create_autocmd("WinEnter", { pattern = '*', command = "set cursorline" })
@@ -200,6 +208,9 @@ vim.cmd("colorscheme nightfox")
 -- MAPPINGS --
 -- Open Config file
 vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
+
+-- Copy/Paste/Clipboard
+-- vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
 vim.keymap.set('v', '<leader>c', '"+y')
 
 -- Neotree --
@@ -225,8 +236,6 @@ vim.keymap.set("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 
 -- Tabs --
 -- Since the vim shortcut gt and gT is tricky in terminal
-vim.keymap.set("t", "<A-PageUp>",   [[<C-\><C-n>:tabprevious<CR>]])
-vim.keymap.set("n", "<A-PageUp>",   [[:tabprevious<CR>]])
-vim.keymap.set("n", "<A-PageDown>", [[:tabnext<CR>]])
-vim.keymap.set("t", "<A-PageDown>", [[<C-\><C-n>:tabnext<CR>]])
+vim.keymap.set({ "n", "t" }, "<A-PageUp>",   [[<C-\><C-n>:tabprevious<CR>]])
+vim.keymap.set({ "n", "t" }, "<A-PageDown>", [[<C-\><C-n>:tabnext<CR>]])
 

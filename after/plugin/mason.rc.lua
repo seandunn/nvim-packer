@@ -8,5 +8,9 @@ mason.setup({
 })
 
 lspconfig.setup {
-  ensure_installed = { "sumneko_lua", "tailwindcss" },
+  ensure_installed = {
+    "solargraph",
+    "sorbet",
+    "sumneko_lua",
+ },
 }
