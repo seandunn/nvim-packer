@@ -65,7 +65,10 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'nvim-lualine/lualine.nvim' -- Statusline
-  use 'EdenEast/nightfox.nvim' -- Colourscheme
+
+  -- Colourschemes --
+  use 'folke/tokyonight.nvim'
+  use 'EdenEast/nightfox.nvim'
 
   use 'nvim-lua/plenary.nvim' -- Common utilities
 
@@ -203,7 +206,9 @@ require('nightfox').setup({
     }
   }
 })
-vim.cmd("colorscheme nightfox")
+
+-- vim.cmd.colorscheme("nightfox")
+vim.cmd.colorscheme("tokyonight-night")
 
 -- MAPPINGS --
 -- Open Config file
