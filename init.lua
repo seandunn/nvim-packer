@@ -11,8 +11,10 @@ vim.wo.number = true
 vim.opt.mouse = 'a'
 vim.g.mapleader = ' '
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-vim.opt.title = true
+--vim.opt.title = true -- this beggar randomly prints the filename across the screen!
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.hlsearch = true
@@ -25,8 +27,9 @@ vim.opt.scrolloff = 1
 vim.opt.shell = 'zsh'
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
 vim.opt.undofile = true
-vim.opt.inccommand = 'split'
-vim.opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
+
+vim.opt.inccommand = 'nosplit'
+vim.opt.ignorecase = true 
 vim.opt.smarttab = true
 vim.opt.breakindent = true
 vim.opt.shiftwidth = 2
@@ -35,8 +38,9 @@ vim.opt.wrap = true
 vim.opt.backspace = { 'start', 'eol', 'indent' }
 vim.opt.path:append { '**' } -- Finding files - Search down into subfolders
 vim.opt.wildignore:append { '*/node_modules/*' }
-vim.w.splitbelow = true
-vim.w.splitright = true
+
+vim.cmd.set("splitbelow")
+vim.cmd.set("splitright")
 
 -- HIGHLIGHTS --
 vim.opt.cursorline = true
@@ -68,14 +72,13 @@ require('packer').startup(function(use)
 
   -- Colourschemes --
   use 'folke/tokyonight.nvim'
-  use 'EdenEast/nightfox.nvim'
+  use  'EdenEast/nightfox.nvim' 
 
-  use 'nvim-lua/plenary.nvim' -- Common utilities
+  use 'L3MON4D3/LuaSnip'
 
   -- LSP --
   use 'hrsh7th/nvim-cmp' -- Completion
   use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
-  -- use 'L3MON4D3/LuaSnip'
   use 'glepnir/lspsaga.nvim' -- LSP UIs
   use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
@@ -84,13 +87,27 @@ require('packer').startup(function(use)
   use 'williamboman/mason-lspconfig.nvim'
   use 'williamboman/mason.nvim' -- Install/manage LSP servers
 
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  }
-  use 'kyazdani42/nvim-web-devicons' -- File icons
+  -- Tree Sitter --
+  use  'nvim-treesitter/nvim-treesitter' 
+  require('nvim-treesitter.install').update({ with_sync = true }) 
+
+  use  {
+    'windwp/nvim-ts-autotag',
+    requires = {
+      'nvim-treesitter/nvim-treesitter' 
+    }
+  } 
+  require('nvim-ts-autotag').setup() 
+
+  use  'kyazdani42/nvim-web-devicons' 
   require("nvim-web-devicons").setup()
-  use 'nvim-telescope/telescope.nvim' -- Fuzzy finder for all things
+
+  use  {
+    'nvim-telescope/telescope.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim' 
+    }
+  }
 
   -- Project tree
   use {
@@ -103,41 +120,31 @@ require('packer').startup(function(use)
     }
   }
 
-  use {
-    'windwp/nvim-autopairs',
-    run = function()
-      require("nvim-autopairs").setup({
-        disable_filetype = { "TelescopePrompt" , "vim" },
-      })
-    end
-  }
+  -- use {
+  --   'nvim-tree/nvim-tree.lua',
+  --   requires = {
+  --     'nvim-tree/nvim-web-devicons', -- optional, for file icons
+  --   },
+  -- }
 
-  use {
-    'windwp/nvim-ts-autotag',
-    run = function() require('nvim-ts-autotag').setup() end
-  }
-
-  use {
-    'norcalli/nvim-colorizer.lua',
-    run = function() require'colorizer'.setup() end
-  }
-
-
-  -- use({
-  --   "iamcco/markdown-preview.nvim",
-  --   run = function() vim.fn["mkdp#util#install"]() end,
+  use  'windwp/nvim-autopairs' 
+  -- require("nvim-autopairs").setup({
+  --   disable_filetype = { "TelescopePrompt" , "vim" },
   -- })
+
+
+  use  'norcalli/nvim-colorizer.lua' 
+  -- require'colorizer'.setup()
+
   use 'akinsho/nvim-bufferline.lua'
 
-  use {'lewis6991/gitsigns.nvim',
-  run = function() require('gitsigns').setup() end
-  }
-
+  use 'lewis6991/gitsigns.nvim' 
+  require('gitsigns').setup() 
 
   use 'tpope/vim-fugitive' -- Classic Git frontend
 
-  use { 'numToStr/Comment.nvim', config = function() require('Comment').setup() end
-  }
+  use  'numToStr/Comment.nvim' 
+  require('Comment').setup() 
 
   use 'vimwiki/vimwiki'
 
@@ -162,9 +169,8 @@ require('packer').startup(function(use)
       vim.o.winminwidth = 10
       vim.o.equalalways = false
     end,
-    run = function() require('windows').setup() end
   }
-
+  require('windows').setup() 
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -172,10 +178,6 @@ require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
-
--- Undercurl
--- vim.cmd([[let &t_Cs = "\e[4:3m"]])
--- vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
 -- cursorline
 vim.api.nvim_create_autocmd("WinEnter", { pattern = '*', command = "set cursorline" })
@@ -207,8 +209,10 @@ require('nightfox').setup({
   }
 })
 
--- vim.cmd.colorscheme("nightfox")
-vim.cmd.colorscheme("tokyonight-night")
+--vim.cmd.colorscheme("slate")
+vim.cmd.colorscheme("nightfox")
+-- vim.cmd.colorscheme("tokyonight-night")
+-- vim.cmd.colorscheme("tokyonight-storm")
 
 -- MAPPINGS --
 -- Open Config file
