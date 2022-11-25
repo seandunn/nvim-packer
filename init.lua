@@ -69,7 +69,7 @@ vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "setlocal non
 -- Remember if we are in insert mode for each terminal buffer
 vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "startinsert" })
 vim.api.nvim_create_autocmd("TermEnter ", { pattern = '*', command = [[ let b:insertMode = "yes" ]] })
--- vim.api.nvim_create_autocmd("BufEnter", { pattern = 'term://*', command = "startinsert" } )
+vim.api.nvim_create_autocmd("BufEnter", { pattern = 'term://*', command = "startinsert" } )
 
 require('plugins')
 vim.cmd.colorscheme("slate") -- Fallback colorscheme
