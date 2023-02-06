@@ -11,8 +11,8 @@ vim.wo.number = true
 vim.opt.mouse = 'a'
 vim.g.mapleader = ' '
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 --vim.opt.title = true -- this beggar randomly prints the filename across the screen!
 vim.opt.autoindent = true
@@ -71,6 +71,10 @@ vim.api.nvim_create_autocmd("TermOpen", { pattern = '*', command = "startinsert"
 vim.api.nvim_create_autocmd("TermEnter ", { pattern = '*', command = [[ let b:insertMode = "yes" ]] })
 vim.api.nvim_create_autocmd("BufEnter", { pattern = 'term://*', command = "startinsert" } )
 
+-- Unused Providers --
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+
 require('plugins')
 vim.cmd.colorscheme("slate") -- Fallback colorscheme
 -- vim.cmd.colorscheme("tokyonight-night")
@@ -79,6 +83,7 @@ vim.cmd.colorscheme("slate") -- Fallback colorscheme
 -- MAPPINGS --
 -- Open Config file
 vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
+vim.keymap.set('n', '<leader>,p', ':tabe ~/.config/nvim/lua/plugins.lua<CR>')
 
 -- Copy/Paste/Clipboard
 -- vim.opt.clipboard = 'unnamedplus' -- points unnamed regs at system clipboard
@@ -109,4 +114,14 @@ vim.keymap.set("n", "<A-o>", [[<C-\><C-n>:tabe<CR>:term<CR>]])
 -- Since the vim shortcut gt and gT is tricky in terminal
 vim.keymap.set({ "n", "t" }, "<A-PageUp>",   [[<C-\><C-n>:tabprevious<CR>]])
 vim.keymap.set({ "n", "t" }, "<A-PageDown>", [[<C-\><C-n>:tabnext<CR>]])
+
+-- Visual Move text --
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- Paste, sending deleted text to unnamed buffer
+vim.keymap.set("x", "<leader>v", [["_dP]])
+
+-- Safety first
+vim.keymap.set("n", "Q", "<nop>")
 

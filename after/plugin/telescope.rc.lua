@@ -22,6 +22,18 @@ vim.keymap.set('n', '<leader>tf', function()
   builtin.find_files()
 end)
 
+vim.keymap.set('n', '<leader>ts', function()
+  builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
+
+vim.keymap.set('n', '<leader>tt', function()
+  builtin.treesitter()
+end)
+
+vim.keymap.set('n', '<C-p>', function()
+  builtin.git_files()
+end)
+
 vim.keymap.set('n', '<leader>tr', function()
   builtin.live_grep()
 end)

@@ -9,6 +9,7 @@ ts.setup {
   highlight = {
     enable = true,
     disable = {},
+    additional_vim_regex_highlighting = false,
   },
   indent = {
     enable = true,
@@ -21,6 +22,7 @@ ts.setup {
     "css",
     "dockerfile",
     "embedded_template",
+    "help",
     "html",
     "javascript",
     "json",
@@ -28,12 +30,15 @@ ts.setup {
     "make",
     "ruby",
     "rust",
+    "typescript",
     "vim",
     "yaml",
   },
   autotag = {
     enable = true,
   },
+
+
 }
 
 require "nvim-treesitter.parsers".get_parser_configs()

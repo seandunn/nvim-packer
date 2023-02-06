@@ -22,26 +22,40 @@ require('packer').startup(function(use)
 
   use 'L3MON4D3/LuaSnip'
 
-  -- LSP --
-  use 'hrsh7th/nvim-cmp' -- Completion
-  use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
-  use 'glepnir/lspsaga.nvim' -- LSP UIs
-  use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
-  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  use 'neovim/nvim-lspconfig' -- LSP
-  use 'onsails/lspkind-nvim' -- vscode-like pictograms
-  use 'williamboman/mason-lspconfig.nvim'
-  use 'williamboman/mason.nvim' -- Install/manage LSP servers
+  -- -- LSP --
+  use {
+	  'VonHeikemen/lsp-zero.nvim',
+	  branch = 'v1.x',
+	  requires = {
+		  -- LSP Support
+		  {'neovim/nvim-lspconfig'},
+		  {'williamboman/mason.nvim'},
+		  {'williamboman/mason-lspconfig.nvim'},
+
+		  -- Autocompletion
+		  {'hrsh7th/nvim-cmp'},
+		  {'hrsh7th/cmp-buffer'},
+		  {'hrsh7th/cmp-path'},
+		  {'saadparwaiz1/cmp_luasnip'},
+		  {'hrsh7th/cmp-nvim-lsp'},
+		  {'hrsh7th/cmp-nvim-lua'},
+
+		  -- Snippets
+		  {'L3MON4D3/LuaSnip'},
+		  {'rafamadriz/friendly-snippets'},
+	  }
+  }
 
   -- Tree Sitter --
-  use  'nvim-treesitter/nvim-treesitter'
+  use({'nvim-treesitter/nvim-treesitter', run = ':TSUpdate()'})
+  use('nvim-treesitter/playground')
 
-  -- use  {
-  --   'windwp/nvim-ts-autotag',
-  --   requires = {
-  --     'nvim-treesitter/nvim-treesitter'
-  --   }
-  -- }
+  use  {
+    'windwp/nvim-ts-autotag',
+    requires = {
+      'nvim-treesitter/nvim-treesitter'
+    }
+  }
 
   use  'kyazdani42/nvim-web-devicons'
 
@@ -72,6 +86,11 @@ require('packer').startup(function(use)
   use 'lewis6991/gitsigns.nvim'
 
   use 'tpope/vim-fugitive' -- Classic Git frontend
+
+  use 'preservim/tagbar'
+
+  use 'nelstrom/vim-visual-star-search'
+  use("mbbill/undotree")
 
   use  'numToStr/Comment.nvim'
 
