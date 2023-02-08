@@ -20,8 +20,6 @@ require('packer').startup(function(use)
   use 'folke/tokyonight.nvim'
   use  'EdenEast/nightfox.nvim'
 
-  use 'L3MON4D3/LuaSnip'
-
   -- -- LSP --
   use {
 	  'VonHeikemen/lsp-zero.nvim',
