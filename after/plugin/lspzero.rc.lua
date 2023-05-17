@@ -3,9 +3,11 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-  'tsserver',
-  'sumneko_lua',
-  'rust_analyzer',
+  -- 'tsserver',
+  -- 'sumneko_lua',
+  -- 'rust_analyzer',
+  -- "ruby-lsp",
+  "solargraph"
 })
 
 -- Fix Undefined global 'vim'
@@ -58,7 +60,9 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+
+  -- Need to find another keymap for this as I need C-H to be backspace!
+  -- vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
 lsp.setup()

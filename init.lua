@@ -82,6 +82,8 @@ vim.cmd.colorscheme("slate") -- Fallback colorscheme
 
 -- MAPPINGS --
 -- Open Config file
+vim.keymap.set('n', 'k', 'gk')
+vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', '<leader>,v', ':tabe ~/.config/nvim/init.lua<CR>')
 vim.keymap.set('n', '<leader>,p', ':tabe ~/.config/nvim/lua/plugins.lua<CR>')
 

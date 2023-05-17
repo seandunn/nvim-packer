@@ -1,3 +1,5 @@
+-- vim.indentkeys -= "."
+
 local install_status, ts_install = pcall(require, "nvim-treesitter.install")
 if (not install_status) then return end
   ts_install.update({ with_sync = true })
@@ -12,7 +14,7 @@ ts.setup {
     additional_vim_regex_highlighting = false,
   },
   indent = {
-    enable = true,
+    enable = false,
     disable = { },
   },
   ensure_installed = {
@@ -38,7 +40,11 @@ ts.setup {
     enable = true,
   },
 
-
+  matchup = {
+    enable = true,              -- mandatory, false will disable the whole extension
+    -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
+    -- [options]
+  },
 }
 
 require "nvim-treesitter.parsers".get_parser_configs()

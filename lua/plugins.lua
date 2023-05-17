@@ -55,6 +55,15 @@ require('packer').startup(function(use)
     }
   }
 
+
+  use {
+    'andymass/vim-matchup',
+    setup = function()
+      -- may set any options here
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+    end
+  }
+
   use  'kyazdani42/nvim-web-devicons'
 
   use  {
@@ -83,9 +92,13 @@ require('packer').startup(function(use)
 
   use 'lewis6991/gitsigns.nvim'
 
-  use 'tpope/vim-fugitive' -- Classic Git frontend
 
   use 'preservim/tagbar'
+  use 'tpope/vim-fugitive' -- Classic Git frontend
+  use "tpope/vim-rails"
+  use "tpope/vim-abolish"
+  use "jgdavey/vim-blockle"
+
 
   use 'nelstrom/vim-visual-star-search'
   use("mbbill/undotree")

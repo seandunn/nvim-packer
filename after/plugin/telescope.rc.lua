@@ -30,6 +30,10 @@ vim.keymap.set('n', '<leader>tt', function()
   builtin.treesitter()
 end)
 
+vim.keymap.set('n', '<leader>tk', function()
+  builtin.keymaps()
+end)
+
 vim.keymap.set('n', '<C-p>', function()
   builtin.git_files()
 end)
